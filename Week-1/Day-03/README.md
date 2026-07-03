@@ -2,8 +2,6 @@
 
 **Date:** 03 July 2026
 
-**Duration:** 6:30 PM – 8:30 PM
-
 ---
 
 # Objective
