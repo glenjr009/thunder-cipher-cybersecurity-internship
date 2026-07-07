@@ -121,8 +121,8 @@ Topics will be updated as the internship progresses.
 
 | Week   | Status        |
 | ------ | ------------- |
-| Week 1 | ⏳ In Progress |
-| Week 2 | ⬜ Pending     |
+| Week 1 | ✅ Completed   |
+| Week 2 | ⏳ In Progress |
 | Week 3 | ⬜ Pending     |
 | Week 4 | ⬜ Pending     |
 
