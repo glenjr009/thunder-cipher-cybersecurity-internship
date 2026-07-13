@@ -56,9 +56,6 @@ thunder-cipher-cybersecurity-internship/
 │
 ├── Assignments/
 ├── Cheat-Sheets/
-├── Scripts/
-├── Resources/
-└── Images/
 ```
 
 ---
@@ -122,7 +119,7 @@ Topics will be updated as the internship progresses.
 | Week   | Status        |
 | ------ | ------------- |
 | Week 1 | ✅ Completed   |
-| Week 2 | ⏳ In Progress |
+| Week 2 | ✅ Completed   |
 | Week 3 | ⬜ Pending     |
 | Week 4 | ⬜ Pending     |
 
