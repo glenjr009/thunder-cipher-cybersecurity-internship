@@ -1,228 +1,96 @@
-# Day 07 - Active Reconnaissance, Enumeration & Web Discovery
+# Day 07 - Scanning & Enumeration with Nmap
 
 **Date:** 13 July 2026
 
 ---
 
-# Objective
+## Objective
 
-The objective of today's session was to introduce active reconnaissance techniques using Nmap and Gobuster, understand service enumeration, explore the Nmap Scripting Engine (NSE), and apply these concepts by solving practical labs on the ThunderCipher platform.
-
----
-
-# Session Overview
-
-Today's session transitioned from passive reconnaissance to active reconnaissance techniques. We explored how security professionals identify live hosts, enumerate services, discover hidden web resources, and automate information gathering using Nmap scripts. The session concluded with hands-on labs on the ThunderCipher platform, where we applied these techniques in real-world scenarios.
+To understand the role of scanning and enumeration in penetration testing using Nmap and related tools, and to apply these concepts through practical labs on the ThunderCipher platform.
 
 ---
 
-# Topics Covered
+## Topics Covered
 
-- Active Reconnaissance
-- Network Enumeration
-- Nmap
+- Scanning vs Enumeration
+- TCP Three-Way Handshake
+- Port States
+- Nmap Fundamentals
 - Nmap Scan Types
+- Host Discovery
 - Service & Version Detection
+- OS Fingerprinting
+- Banner Grabbing
 - Nmap Scripting Engine (NSE)
-- Gobuster
-- Directory Enumeration
+- Gobuster Directory Enumeration
 - SSH Enumeration
-- Hydra (Introduction)
-- Password Brute Force Concepts
-- ThunderCipher Practical Labs
+- Basic Hydra Usage
+- Legal & Ethical Considerations
 
 ---
 
-# Theory Notes
+## Practical Activities
 
-## Active Reconnaissance
-
-Unlike passive reconnaissance, active reconnaissance involves directly interacting with the target system. This includes scanning hosts, identifying open ports, discovering running services, and collecting information required for vulnerability assessment.
-
----
-
-## Nmap
-
-Nmap (Network Mapper) is one of the most widely used network scanning tools in cybersecurity.
-
-It can be used to:
-
-- Discover live hosts
-- Identify open ports
-- Detect running services
-- Determine service versions
-- Perform operating system detection
-- Execute NSE scripts
+- Performed host discovery using Nmap
+- Scanned open ports and identified running services
+- Used version detection (`-sV`) and OS fingerprinting (`-O`)
+- Explored Nmap NSE scripts for service enumeration
+- Enumerated web directories using Gobuster
+- Observed banner grabbing techniques
+- Solved guided ThunderCipher labs focused on scanning and enumeration
 
 ---
 
-## Common Nmap Scan Types
-
-We discussed several scan techniques, including:
-
-- TCP Connect Scan
-- SYN Scan
-- Version Detection
-- Service Enumeration
-- Script Scanning
-
-These scans help security professionals understand the attack surface of a target.
-
----
-
-## Nmap Scripting Engine (NSE)
-
-The Nmap Scripting Engine (NSE) extends Nmap's capabilities by allowing scripts to automate information gathering and vulnerability detection.
-
-Popular NSE categories covered:
-
-- HTTP Enumeration
-- SMB Discovery
-- FTP Anonymous Login Check
-- SSL Certificate Enumeration
-- Vulnerability Detection
-
-NSE enables faster reconnaissance and improves penetration testing workflows.
-
----
-
-## Gobuster
-
-Gobuster is a directory and file enumeration tool commonly used during web application assessments.
-
-It performs brute-force discovery of hidden:
-
-- Directories
-- Files
-- Endpoints
-
-using predefined wordlists.
-
----
-
-## SSH Enumeration
-
-The session also introduced SSH enumeration and discussed how authentication services are commonly assessed during penetration tests.
-
----
-
-## Hydra
-
-Hydra was briefly introduced as a password auditing tool capable of testing login credentials against multiple network services.
-
-The instructor emphasized that such tools should only be used within authorized environments.
-
----
-
-# Practical Session
-
-Today's practical session involved applying active reconnaissance techniques.
-
-Activities included:
-
-- Running Nmap scans against lab targets
-- Performing service enumeration
-- Executing Nmap NSE scripts
-- Using Gobuster for directory enumeration
-- Understanding SSH authentication
-- Observing Hydra command syntax for password auditing
-- Solving multiple ThunderCipher hands-on labs
-- Enumerating hidden resources within web applications
-
----
-
-# Tools Introduced
+## Tools Used
 
 | Tool | Purpose |
 |------|---------|
-| Nmap | Network discovery and port scanning |
-| NSE | Nmap scripting for automation and enumeration |
-| Gobuster | Directory and file enumeration |
-| Hydra | Password auditing and brute-force testing |
-| SSH | Secure remote administration protocol |
-| ThunderCipher Platform | Practical cybersecurity labs |
+| Nmap | Network scanning & service enumeration |
+| NSE | Automated service enumeration |
+| Gobuster | Directory enumeration |
+| Netcat | Banner grabbing |
+| Hydra | Password auditing (Introduction) |
+| ThunderCipher Platform | Hands-on cybersecurity labs |
 
 ---
 
-# Commands Practiced
+## Commands Practiced
 
 ```bash
-# Basic Scan
-nmap <target-ip>
+nmap -sn <target>
 
-# Service Version Detection
-nmap -sV <target-ip>
+sudo nmap -sS -sV -O <target>
 
-# NSE Scan
-nmap --script http-enum -p80 <target-ip>
+sudo nmap -A <target>
 
-# SMB Discovery
-nmap --script smb-os-discovery -p445 <target-ip>
+nmap --script http-enum -p80 <target>
 
-# Gobuster Directory Enumeration
-gobuster dir -u http://<target-ip>/ -w /usr/share/wordlists/dirb/common.txt
+gobuster dir -u http://<target>/ -w /usr/share/wordlists/dirb/common.txt
 
-# Hydra (Demonstration)
-hydra -l <username> -P <wordlist> ssh://<target-ip>
+nc -nv <target> 22
+
+curl -I http://<target>
 ```
 
 ---
 
-# Hands-on Labs
+## Key Learnings
 
-During today's session, we completed several practical exercises on the ThunderCipher platform, including:
-
-- Network scanning using Nmap
-- Directory enumeration with Gobuster
-- Running NSE scripts for service enumeration
-- Exploring SSH authentication
-- Solving web-based enumeration challenges
-- Applying reconnaissance techniques to identify exposed services and hidden resources
+- Understood the difference between scanning and enumeration.
+- Learned various Nmap scan techniques and their use cases.
+- Performed service and version detection using Nmap.
+- Explored NSE scripts for automated enumeration.
+- Used Gobuster to discover hidden web directories.
+- Applied reconnaissance techniques by solving ThunderCipher labs.
 
 ---
 
-# Key Learnings
+## Reflection
 
-- Understood the difference between passive and active reconnaissance.
-- Learned how to enumerate systems using Nmap.
-- Explored different Nmap scan techniques.
-- Learned how NSE automates reconnaissance tasks.
-- Used Gobuster to discover hidden directories.
-- Understood the basics of password auditing using Hydra.
-- Applied enumeration techniques during ThunderCipher practical labs.
-- Strengthened practical skills in identifying web application attack surfaces.
+Today's session strengthened my understanding of the scanning and enumeration phase of penetration testing. The combination of Nmap, NSE, and Gobuster demonstrated how multiple tools work together to identify services, gather information, and prepare for deeper security assessments. The hands-on labs provided practical experience in applying these concepts within an authorized environment.
 
 ---
 
-# Challenges Faced
+## Screenshots
 
-The ThunderCipher labs required careful observation and methodical enumeration. Rather than relying on a single tool, combining multiple techniques such as Nmap scanning, NSE scripts, and Gobuster enumeration proved essential for successfully solving the exercises.
-
----
-
-# Assignment
-
-The practical lab served as today's assignment.
-
-Tasks included:
-
-- Perform network scanning using Nmap.
-- Enumerate services using NSE scripts.
-- Discover hidden directories using Gobuster.
-- Solve the assigned ThunderCipher web enumeration labs.
-
----
-
-# Reflection
-
-Today's session was one of the most practical and engaging sessions of the internship so far. Learning how to actively enumerate systems using Nmap and Gobuster demonstrated how reconnaissance progresses from passive information gathering to identifying accessible services and hidden resources. Solving the ThunderCipher labs reinforced the importance of systematic enumeration and showed how combining multiple tools leads to more effective security assessments.
-
----
-
-# Next Steps
-
-- Practice advanced Nmap scan techniques.
-- Explore additional NSE scripts.
-- Learn virtual host enumeration.
-- Practice Gobuster with larger wordlists.
-- Continue solving web enumeration labs to strengthen reconnaissance skills.
+Screenshots from the practical session are available in the `screenshots/` directory.
