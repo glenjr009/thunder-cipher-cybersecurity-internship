@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ThunderCipher - Intelligence-Driven Reconnaissance</title>
+    <style>
+        :root {
+            --bg-main: #060b13;
+            --bg-card: #0b1320;
+            --border-color: #172a45;
+            --accent-cyan: #00f0ff;
+            --accent-yellow: #e2b714;
+            --accent-purple: #a855f7;
+            --text-main: #94a3b8;
+            --text-light: #f8fafc;
+            --danger-red: #ef4444;
+            --success-green: #22c55e;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Top Header Area */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-yellow));
+            color: #000;
+            font-weight: bold;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 1.2rem;
+        }
+
+        .title-area h1 {
+            color: var(--text-light);
+            font-size: 1.5rem;
+            letter-spacing: 1px;
+        }
+
+        .title-area span {
+            color: var(--accent-cyan);
+            font-size: 0.9rem;
+        }
+
+        .status-bar {
+            display: flex;
+            gap: 20px;
+            font-size: 0.85rem;
+        }
+
+        .status-active {
+            color: var(--accent-cyan);
+        }
+
+        /* Main Workspace Grid */
+        .workspace {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 25px;
+            flex-grow: 1;
+            position: relative;
+        }
+
+        /* Sidebar Index */
+        .sidebar {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+        }
+
+        .index-title {
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        .nav-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 10px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.8rem;
+            text-align: left;
+            color: var(--text-main);
+            background: transparent;
+            width: 100%;
+        }
+
+        .nav-item:hover {
+            background: rgba(23, 42, 69, 0.5);
+            color: var(--text-light);
+        }
+
+        .nav-item.active {
+            border: 1px solid var(--accent-cyan);
+            background: rgba(0, 240, 255, 0.05);
+            color: var(--accent-cyan);
+        }
+
+        .nav-num {
+            border: 1px solid var(--border-color);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            flex-shrink: 0;
+            color: var(--text-main);
+        }
+
+        .nav-item.active .nav-num {
+            border-color: var(--accent-cyan);
+            color: var(--accent-cyan);
+        }
+
+        /* Content Panel Layout */
+        .content-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        /* Dashboard View Boxes */
+        .dashboard-box {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 25px;
+            position: relative;
+        }
+
+        .box-category {
+            color: #4a5568;
+            font-size: 0.8rem;
+            margin-bottom: 12px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* Code Block Panel */
+        .code-container {
+            position: relative;
+            background-color: rgba(6, 11, 19, 0.8);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .code-block {
+            color: var(--accent-cyan);
+            font-size: 0.85rem;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(0, 240, 255, 0.1);
+            border: 1px solid var(--accent-cyan);
+            color: var(--accent-cyan);
+            padding: 4px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: background 0.2s;
+        }
+
+        .copy-btn:hover {
+            background: rgba(0, 240, 255, 0.25);
+        }
+
+        /* Split columns styling */
+        .grid-split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        /* Tables matching original filters layout */
+        .table-container {
+            background-color: rgba(6, 11, 19, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 15px;
+        }
+
+        .table-title {
+            color: var(--accent-cyan);
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .custom-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .custom-table td {
+            padding: 8px 10px;
+            font-size: 0.8rem;
+            border-bottom: 1px solid rgba(23, 42, 69, 0.3);
+            vertical-align: top;
+        }
+
+        .custom-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .table-keyword {
+            color: var(--accent-yellow);
+            font-weight: bold;
+            width: 120px;
+        }
+
+        .table-desc {
+            color: var(--text-main);
+        }
+
+        /* 3-Phase Lifecycle Component */
+        .lifecycle-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .phase-card {
+            background: rgba(6, 11, 19, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .phase-header {
+            color: var(--accent-cyan);
+            font-size: 0.95rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .phase-name {
+            color: var(--accent-yellow);
+            font-size: 0.85rem;
+            margin-bottom: 15px;
+        }
+
+        .phase-list {
+            list-style: none;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            font-size: 0.8rem;
+        }
+
+        .phase-list li {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .phase-list li::before {
+            content: "+";
+            color: var(--accent-cyan);
+            font-weight: bold;
+        }
+
+        /* Interactive Quiz Panel */
+        .quiz-card {
+            background: rgba(6, 11, 19, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 20px;
+            margin-top: 15px;
+        }
+
+        .quiz-option {
+            background: rgba(23, 42, 69, 0.3);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 12px;
+            margin-top: 10px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.2s;
+        }
+
+        .quiz-option:hover {
+            border-color: var(--accent-cyan);
+            background: rgba(0, 240, 255, 0.05);
+        }
+
+        .quiz-option.correct {
+            border-color: var(--success-green);
+            background: rgba(34, 197, 94, 0.1);
+            color: var(--success-green);
+        }
+
+        .quiz-option.incorrect {
+            border-color: var(--danger-red);
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger-red);
+        }
+
+        .quiz-explanation {
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(0, 240, 255, 0.05);
+            border-left: 3px solid var(--accent-cyan);
+            font-size: 0.8rem;
+            display: none;
+        }
+
+        /* Legal Boundary Disclaimer Panel */
+        .legal-disclaimer {
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            background: rgba(239, 68, 68, 0.03);
+            border-radius: 6px;
+            padding: 20px;
+            margin-top: 25px;
+        }
+
+        .legal-title {
+            color: var(--danger-red);
+            font-weight: bold;
+            font-size: 0.85rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .legal-text {
+            font-size: 0.78rem;
+            line-height: 1.6;
+            color: #cbd5e1;
+        }
+
+        p {
+            font-size: 0.85rem;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        h2 {
+            color: var(--text-light);
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Panel -->
+    <header>
+        <div class="brand">
+            <div class="logo">⚡</div>
+            <div class="title-area">
+                <h1>THUNDERCIPHER</h1>
+                <span>// Intelligence-Driven Reconnaissance</span>
+            </div>
+        </div>
+        <div class="status-bar">
+            <div class="status-active"><span style="color:var(--accent-cyan)">❯</span> SEC-LABS // ACTIVE NODE</div>
+        </div>
+    </header>
+
+    <!-- Content Area Setup -->
+    <div class="workspace">
+        
+        <!-- Sticky Left Navigation Index -->
+        <aside class="sidebar">
+            <div class="nav-list">
+                <div class="index-title">📁 Index</div>
+                <button class="nav-item active" onclick="switchModule(1)">
+                    <span class="nav-num">01</span> 1. Intro to Shodan Architectural Mapping
+                </button>
+                <button class="nav-item" onclick="switchModule(2)">
+                    <span class="nav-num">02</span> 2. Syntax Directives & Filter Operators
+                </button>
+                <button class="nav-item" onclick="switchModule(3)">
+                    <span class="nav-num">03</span> 3. The ThunderCipher Recon Lifecycle
+                </button>
+                <button class="nav-item" onclick="switchModule(4)">
+                    <span class="nav-num">04</span> 4. Knowledge Check: Syntax Syntax Check
+                </button>
+                <button class="nav-item" onclick="switchModule(5)">
+                    <span class="nav-num">05</span> 5. Dork Repositories for High-Impact Vulns
+                </button>
+                <button class="nav-item" onclick="switchModule(6)">
+                    <span class="nav-num">06</span> 6. Deep Mapping & Advanced Queries
+                </button>
+                <button class="nav-item" onclick="switchModule(7)">
+                    <span class="nav-num">07</span> 7. Automated Pipeline Integration
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Workspace Terminal Panel -->
+        <main class="content-panel">
+            
+            <div id="dynamic-content-box" class="dashboard-box">
+                <!-- Content will load here dynamically via JavaScript -->
+            </div>
+
+            <!-- Persistent Legal Boundary Disclaimer (Always visible at the bottom) -->
+            <div class="legal-disclaimer">
+                <div class="legal-title">⚠️ LEGAL BOUNDARY DISCLAIMER</div>
+                <p class="legal-text">
+                    Always ensure active domains stay within explicitly defined program scopes. Do not attempt manual exploitation, fuzzing, or destructive tasks against endpoints identified through Shodan databases without explicit, binding written permission.
+                </p>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Script to Handle Navigation Content Dynamic Swapping -->
+    <script>
+        const contentDatabase = {
+            1: `
+                <div class="box-category">// Module 01 / Architectural Paradigm</div>
+                <h2>1. Introduction to Shodan Architectural Mapping</h2>
+                <p>
+                    Shodan is a specialized search engine that indexes internet-connected devices, servers, and services. Unlike traditional search engines that crawl web pages for human consumption, Shodan interrogates open network ports, grabs structural response banners, and indexes those headers directly.
+                </p>
+                <p>
+                    For security analysts and bug bounty hunters, Shodan offers an invaluable passive reconnaissance layer. It exposes running services, software version metadata, misconfigured admin endpoints, IoT hardware structures, and database structures globally without requiring direct target active scans.
+                </p>
+                <div class="code-container">
+                    <div class="code-block"># High-level architecture passive check comparison:\nTraditional Search Engines (Google/Bing) ➔ Index HTML Webpages\nShodan Query Engines ➔ Interrogate Ports ➔ Parse Banners ➔ Index Metadata</div>
+                </div>
+            `,
+            2: `
+                <div class="box-category">// Module 02 / Directives Reference</div>
+                <h2>2. Syntax Directives & Filter Operators</h2>
+                <p>
+                    Refine search query limits using strict syntax operators. Clicking key elements below formats them inside target pipelines.
+                </p>
+                
+                <div class="grid-split">
+                    <!-- Column 1: Common General Search Filters -->
+                    <div class="table-container">
+                        <div class="table-title">Common General Search Filters</div>
+                        <table class="custom-table">
+                            <tr>
+                                <td class="table-keyword">ip:</td>
+                                <td class="table-desc">Filter results by specific IP address.</td>
+                            </tr>
+                            <tr>
+                                <td class="table-keyword">asn:</td>
+                                <td class="table-desc">Filter results by specific ASN ID.</td>
+                            </tr>
+                            <tr>
+                                <td class="table-keyword">hostname:</td>
+                                <td class="table-desc">Filter results by specific domain hostname.</td>
+                            </tr>
+                            <tr>
+                                <td class="table-keyword">net:</td>
+                                <td class="table-desc">Filter results from specified CIDR blocks.</td>
+                            </tr>
+                            <tr>
+                                <td class="table-keyword">isp:</td>
+                                <td class="table-desc">Filter results by specific assigned ISPs.</td>
+                            </tr>
+                            <tr>
+                                <td class="table-keyword">city:</td>
+                                <td class="table-desc">Filter results by specific city locator.</td>
+                            </tr>
+                            <tr>
+                                <td class="table-keyword">country:</td>
+                                <td class="table-desc">Filter by specific two-digit country code.</td>
+                            </tr>
+                            <tr>
+                                <td class="table-keyword">os:</td>
+                                <td class="table-desc">Filter results by particular OS profiles.</td>
+                            </tr>
+                            <tr>
+                                <td class="table-keyword">product:</td>
+                                <td class="table-desc">Filter results by particular application software.</td>
+                            </tr>
+                            <tr>
+                                <td class="table-keyword">version:</td>
+                                <td class="table-desc">Filter results by software version variables.</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <!-- Column 2: Common CLI Commands -->
+                    <div class="table-container">
+                        <div class="table-title">Common CLI Commands</div>
+                        <table class="custom-table">
+                            <tr>
+                                <td class="table-keyword">count</td>
+                                <td class="table-desc">Returns the total quantity of findings for a query.</td>
+                            </tr>
+                            <tr>
+                                <td class="table-keyword">domain</td>
+                                <td class="table-desc">View all available registration data for a domain.</td>
+                            </tr>
+                            <tr>
+                                <td class="table-keyword">honeyscore</td>
+                                <td class="table-desc">Determine if target IP is a decoy/honeypot node.</td>
+                            </tr>
+                            <tr>
+                                <td class="table-keyword">host</td>
+                                <td class="table-desc">Analyze details (locations, ports, certs) for a host.</td>
+                            </tr>
+                            <tr>
+                                <td class="table-keyword">parse</td>
+                                <td class="table-desc">Extract key metrics from downloaded compressed JSON fields.</td>
+                            </tr>
+                            <tr>
+                                <td class="table-keyword">scan</td>
+                                <td class="table-desc">Trigger an active Shodan scanner against an IP / netblock.</td>
+                            </tr>
+                            <tr>
+                                <td class="table-keyword">search</td>
+                                <td class="table-desc">Search the Shodan database directly from terminal console.</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            `,
+            3: `
+                <div class="box-category">// Module 03 / Operational Framework</div>
+                <h2>3. The ThunderCipher Recon Lifecycle</h2>
+                <p>
+                    A structured bug bounty methodology focuses on continuous information gathering to systematically reveal attack surfaces while honoring program scope rules.
+                </p>
+
+                <div class="lifecycle-container">
+                    <div class="phase-card">
+                        <div class="phase-header">Phase 1</div>
+                        <div class="phase-name">Target Footprinting</div>
+                        <ul class="phase-list">
+                            <li>Domain Mapping</li>
+                            <li>Stack Footprinting</li>
+                            <li>Port Discovery</li>
+                        </ul>
+                    </div>
+                    <div class="phase-card">
+                        <div class="phase-header">Phase 2</div>
+                        <div class="phase-name">Vector Evaluation</div>
+                        <ul class="phase-list">
+                            <li>CVE Mapping</li>
+                            <li>Misconfigs Search</li>
+                            <li>Default Banners</li>
+                        </ul>
+                    </div>
+                    <div class="phase-card">
+                        <div class="phase-header">Phase 3</div>
+                        <div class="phase-name">Asset Prioritization</div>
+                        <ul class="phase-list">
+                            <li>High-Value Triage</li>
+                            <li>Scope Verification</li>
+                            <li>Impact Modeling</li>
+                        </ul>
+                    </div>
+                </div>
+            `,
+            4: `
+                <div class="box-category">// Module 04 / Validation Lab</div>
+                <h2>4. Knowledge Check: Basic Shodan Syntax</h2>
+                <p>
+                    Verify your understanding of foundational filter syntax spacing rules.
+                </p>
+
+                <div class="quiz-card">
+                    <p style="font-weight: bold;">Question: Does Shodan allow spaces directly after the colon in a filter operator (e.g., port: 80)?</p>
+                    
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">
+                        <strong>A)</strong> Yes, spacing does not affect how queries are interpreted.
+                    </div>
+                    <div class="quiz-option" onclick="checkAnswer(this, true)">
+                        <strong>B)</strong> No, introducing a space breaks the filter and triggers a generic keyword search.
+                    </div>
+
+                    <div id="quiz-explain" class="quiz-explanation">
+                        <strong>EVALUATION // SUCCESS:</strong> Correct. Shodan requires strict formatting without spaces directly following the filter colon identifier (e.g., <code>port:80</code>). Adding a space will result in Shodan searching for the word "80" instead of using the port modifier filter.
+                    </div>
+                </div>
+            `,
+            5: `
+                <div class="box-category">// Module 05 / Dork Database</div>
+                <h2>5. Dork Repositories for High-Impact Vulnerabilities</h2>
+                <p>
+                    Use these production queries to spot exposed configurations, database files, and sensitive administrative control hubs.
+                </p>
+
+                <div class="code-container">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    <div class="code-block">// Exposed Version Control configuration structures\nhttp.html:".git/config"\nhttp.title:"Index of /.git"</div>
+                </div>
+
+                <div class="code-container">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    <div class="code-block">// Exposed Databases Allowing Anonymous Access\n"MongoDB Server Information" port:27017 -authentication\n"220" "230 Login successful." port:21</div>
+                </div>
+
+                <div class="code-container">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    <div class="code-block">// Exposed Web App configurations (wp-config.php / config.php)\nhttp.html:"* The wp-config.php creation script uses this file"</div>
+                </div>
+            `,
+            6: `
+                <div class="box-category">// Module 06 / Advanced Queries</div>
+                <h2>6. Deep Mapping & Advanced Queries</h2>
+                <p>
+                    Filter historical systems and analyze staging setups to find weaker configuration boundaries.
+                </p>
+
+                <div class="code-container">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    <div class="code-block">// Identify staging setups or internal dev panels\nhostname:staging.target.com ssl:true\nhostname:dev.target.com port:80,443</div>
+                </div>
+
+                <div class="code-container">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    <div class="code-block">// Identify vulnerable VPN assets (Fortinet / Pulse Secure)\nproduct:"Fortinet" vuln:CVE-2018-13379\nproduct:"Pulse Secure" vuln:CVE-2019-11510</div>
+                </div>
+            `,
+            7: `
+                <div class="box-category">// Module 07 / Automate Operations</div>
+                <h2>7. Automated Pipeline Integration</h2>
+                <p>
+                    Automate continuous search monitoring using the Shodan Python API. Keep your active configurations lightweight and optimized.
+                </p>
+
+                <div class="code-container">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    <div class="code-block">import shodan\n\napi = shodan.Shodan("YOUR_PRIVATE_API_KEY")\n\ntry:\n    # Query staging environments\n    results = api.search('hostname:staging.target.com')\n    for match in results['matches']:\n        print(f"IP Target Found: {match['ip_str']} | Port: {match['port']}")\nexcept shodan.APIError as e:\n    print(f"Error executing automated query: {e}")</div>
+                </div>
+            `
+        };
+
+        function switchModule(index) {
+            // Manage Active Class inside Navigation items
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach((item, idx) => {
+                if (idx + 1 === index) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+
+            // Load Chosen Element content
+            document.getElementById('dynamic-content-box').innerHTML = contentDatabase[index];
+        }
+
+        function checkAnswer(selectedElement, isCorrect) {
+            // Remove previous answer evaluations
+            const options = document.querySelectorAll('.quiz-option');
+            options.forEach(opt => {
+                opt.classList.remove('correct', 'incorrect');
+                opt.style.pointerEvents = "none";
+            });
+
+            if (isCorrect) {
+                selectedElement.classList.add('correct');
+            } else {
+                selectedElement.classList.add('incorrect');
+                // Highlight correct option too
+                options[1].classList.add('correct');
+            }
+
+            document.getElementById('quiz-explain').style.display = "block";
+        }
+
+        function copyCode(button) {
+            const codeText = button.nextElementSibling.innerText;
+            navigator.clipboard.writeText(codeText).then(() => {
+                button.innerText = "Copied!";
+                setTimeout(() => {
+                    button.innerText = "Copy";
+                }, 2000);
+            }).catch(err => {
+                console.error("Failed to copy pipeline code block: ", err);
+            });
+        }
+
+        // Initialize App View with first index item
+        document.addEventListener('DOMContentLoaded', () => {
+            switchModule(1);
+        });
+    </script>
+</body>
+</html>
