@@ -122,6 +122,7 @@ Topics will be updated as the internship progresses.
 | Week 2 | ✅ Completed   |
 | Week 3 | ✅ Completed   |
 | Week 4 | ⬜ Pending     |
+| Week 5 | ⬜ Pending     |
 
 ---
 
