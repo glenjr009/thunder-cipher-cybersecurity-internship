@@ -156,37 +156,40 @@ This works only when the binary can be executed with elevated privileges.
 
 ---
 
-# Practical Activities
+## Practical Activities
 
 ### TryHackMe – Linux Privilege Escalation
 
-During the lab, we explored:
+Completed the **Linux Privilege Escalation** room on TryHackMe to understand how attackers identify and exploit common Linux misconfigurations after gaining initial access.
 
-- Linux enumeration
+During the lab, I performed system enumeration to gather information about users, groups, running services, file permissions, scheduled tasks, and SUID binaries. I explored common privilege escalation vectors, including insecure file permissions, SUID binaries, and misconfigured system components.
+
+The lab also introduced **GTFOBins**, a valuable resource for identifying legitimate Linux binaries that can be abused in misconfigured environments. This reinforced the importance of proper system hardening, least privilege, and regular security audits to reduce the risk of privilege escalation.
+
+**Key Concepts Learned**
+
+- Linux system enumeration
+- User and group permissions
 - SUID binaries
-- File permissions
-- Privilege escalation techniques
-- Identifying common Linux misconfigurations
+- Common privilege escalation vectors
+- Principle of Least Privilege
+- GTFOBins for privilege escalation reference
 
 ---
 
-### PortSwigger Lab – Referer-Based Access Control
+### PortSwigger – Referer-Based Access Control
 
-The lab demonstrated how applications relying solely on the Referer header for authorization can be bypassed.
+Completed the **Referer-Based Access Control** lab on PortSwigger Web Security Academy to understand insecure authorization mechanisms.
 
-Using Burp Suite, the HTTP request was modified to manipulate the Referer header and successfully access restricted functionality in the controlled lab environment.
+The lab demonstrated how relying solely on the HTTP **Referer** header for authorization is insecure, as request headers can be modified by an attacker. Using **Burp Suite**, I analyzed and modified HTTP requests to observe how improper server-side authorization checks can lead to unauthorized access.
 
----
+**Key Concepts Learned**
 
-# Key Learnings
-
-- Understood the IAAA security model.
-- Learned how broken access control occurs.
-- Explored Linux privilege escalation concepts.
-- Understood why Referer headers should never be trusted for authorization.
-- Learned how GTFOBins assists during Linux privilege escalation.
-- Completed practical labs on TryHackMe and PortSwigger.
-
+- Access Control Validation
+- Referer Header Manipulation
+- Broken Access Control
+- Authorization Bypass
+- HTTP Request Analysis using Burp Suite
 ---
 
 # Reflection
