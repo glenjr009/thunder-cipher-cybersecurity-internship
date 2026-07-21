@@ -1,12 +1,13 @@
 # Day 13 – Access Control & Linux Privilege Escalation (Week 4)
 
-**Date:** 21 July 2026
+**Date:** 21 July 2026  
+**Duration:** 6:30 PM – 8:30 PM
 
 ---
 
 # Objective
 
-To strengthen the understanding of access control vulnerabilities, privilege escalation techniques, and secure authorization mechanisms through theory and hands-on labs using TryHackMe and PortSwigger Web Security Academy.
+To strengthen my understanding of access control mechanisms, Linux privilege escalation, and authorization vulnerabilities through theoretical concepts and hands-on labs using TryHackMe and PortSwigger Web Security Academy.
 
 ---
 
@@ -18,195 +19,174 @@ To strengthen the understanding of access control vulnerabilities, privilege esc
 - Linux Privilege Escalation
 - Referer-Based Access Control
 - GTFOBins
-- TryHackMe – Linux PrivEsc Room
-- PortSwigger Lab – Referer-Based Access Control
+- Wayback Machine
+- TryHackMe – Linux Privilege Escalation Room
+- PortSwigger – Referer-Based Access Control Lab
 
 ---
 
 # IAAA Security Model
 
-The IAAA model defines the core principles used to secure systems and manage user access.
+The **IAAA** model defines the core process of securely managing user identities and access.
 
-### Identification
-
-The process of claiming an identity.
-
-**Example:** Entering a username such as `glen123`.
-
----
-
-### Authentication
-
-Verifying that the claimed identity is genuine.
-
-**Example:** Logging in using a password, OTP, or fingerprint.
-
----
-
-### Authorization
-
-Determining what an authenticated user is allowed to access.
-
-**Example:** An administrator can manage users, while a normal user can only view their own profile.
-
----
-
-### Accounting (Auditing)
-
-Recording user activities for monitoring and investigation.
-
-**Example:** Logging successful logins, failed login attempts, and file modifications.
+| Component | Description | Example |
+|-----------|-------------|---------|
+| **Identification** | User claims an identity. | Entering a username. |
+| **Authentication** | Verifying the user's identity. | Password, OTP, or biometric authentication. |
+| **Authorization** | Determining what resources the user can access. | Admins can manage users, while normal users have limited permissions. |
+| **Accounting (Auditing)** | Recording user activities for monitoring and investigation. | Login history and audit logs. |
 
 ---
 
 # Access Control Vulnerabilities
 
-Access control vulnerabilities occur when applications fail to properly restrict users from accessing resources or performing actions beyond their permissions.
+Access control vulnerabilities occur when an application fails to properly restrict users from accessing resources or performing actions beyond their assigned permissions.
 
-Common causes include:
+### Common Causes
 
 - Missing authorization checks
 - Improper role validation
-- Direct object reference vulnerabilities
+- Insecure Direct Object References (IDOR)
 - Client-side access control
+- Misconfigured permissions
 
 ---
 
-# Broken Access Control (Revision)
+# Broken Access Control
 
-Broken Access Control occurs when users can access resources or perform actions outside their intended permissions.
+Broken Access Control occurs when users are able to perform actions outside their intended permissions.
 
-### Example
-
-A regular user changes:
+**Example**
 
 ```
-/profile?id=1001
+/profile?id=101
 ```
 
-to
+Changing it to
 
 ```
-/profile?id=1002
+/profile?id=102
 ```
 
-and gains access to another user's profile.
-
-This is one of the most critical vulnerabilities in the OWASP Top 10.
+may allow access to another user's profile if proper authorization checks are missing.
 
 ---
 
 # Linux Privilege Escalation
 
-Privilege escalation is the process of obtaining higher privileges on a system after initial access.
+Privilege escalation is the process of obtaining higher privileges on a Linux system after gaining initial access.
 
-Common techniques include:
+### Common Techniques
 
-- Exploiting SUID binaries
+- SUID binaries
 - Weak file permissions
 - Misconfigured services
-- Cron job abuse
+- Scheduled Cron Jobs
 - Kernel vulnerabilities
-
-**Example**
-
-A low-privileged user exploits a vulnerable SUID binary to gain root privileges.
 
 ---
 
 # Referer-Based Access Control
 
-Some applications rely on the **Referer** HTTP header to authorize requests.
+Some web applications rely on the HTTP **Referer** header to determine whether a request is authorized.
 
 Since HTTP headers can be modified, relying solely on the Referer header is insecure.
 
-### Example
+**Example**
 
-A web application only allows administrators to access:
-
-```
-/admin/deleteUser
-```
-
-by checking whether the request comes from:
-
-```
-/admin
-```
-
-An attacker can manually modify the Referer header using Burp Suite and bypass this protection if no server-side authorization exists.
+A restricted endpoint checks whether the request originated from the admin dashboard. An attacker can modify the Referer header using Burp Suite, potentially bypassing this protection if proper server-side authorization checks are absent.
 
 ---
 
 # GTFOBins
 
-**GTFOBins** is a curated collection of Unix binaries that can be abused to perform privilege escalation, bypass restrictions, transfer files, or spawn shells.
+**GTFOBins** is a curated repository of Unix binaries that can be abused in misconfigured environments for privilege escalation, file transfer, or shell execution.
 
-It is widely used during Linux privilege escalation assessments.
-
-### Example
-
-Using the `find` binary to spawn a shell:
-
-```bash
-find . -exec /bin/sh \; -quit
-```
-
-This works only when the binary can be executed with elevated privileges.
+It is widely used by penetration testers to identify potential privilege escalation vectors during Linux security assessments.
 
 ---
 
-## Practical Activities
+# Wayback Machine
 
-### TryHackMe – Linux Privilege Escalation
+The **Wayback Machine** is an online archive maintained by the Internet Archive that stores historical snapshots of websites.
+
+During reconnaissance and OSINT activities, it can help identify:
+
+- Deleted web pages
+- Previous website structures
+- Hidden directories
+- Archived sensitive files
+- Historical application changes
+
+It is a valuable resource for understanding how a target website has evolved over time.
+
+---
+
+# Practical Activities
+
+## TryHackMe – Linux Privilege Escalation
 
 Completed the **Linux Privilege Escalation** room on TryHackMe to understand how attackers identify and exploit common Linux misconfigurations after gaining initial access.
 
-During the lab, I performed system enumeration to gather information about users, groups, running services, file permissions, scheduled tasks, and SUID binaries. I explored common privilege escalation vectors, including insecure file permissions, SUID binaries, and misconfigured system components.
+During the lab, I performed system enumeration to identify users, groups, running services, file permissions, scheduled tasks, and SUID binaries. I explored common privilege escalation vectors and understood how insecure configurations can lead to elevated privileges.
 
-The lab also introduced **GTFOBins**, a valuable resource for identifying legitimate Linux binaries that can be abused in misconfigured environments. This reinforced the importance of proper system hardening, least privilege, and regular security audits to reduce the risk of privilege escalation.
+The lab also introduced **GTFOBins**, demonstrating how legitimate Linux binaries may be abused in misconfigured environments. Overall, the exercise emphasized the importance of system hardening, proper permission management, and the Principle of Least Privilege.
 
-**Key Concepts Learned**
+### Key Concepts Learned
 
-- Linux system enumeration
-- User and group permissions
-- SUID binaries
-- Common privilege escalation vectors
+- Linux Enumeration
+- User & Group Permissions
+- SUID Binaries
+- Privilege Escalation Techniques
 - Principle of Least Privilege
-- GTFOBins for privilege escalation reference
+- GTFOBins
 
 ---
 
-### PortSwigger – Referer-Based Access Control
+## PortSwigger – Referer-Based Access Control
 
-Completed the **Referer-Based Access Control** lab on PortSwigger Web Security Academy to understand insecure authorization mechanisms.
+Completed the **Referer-Based Access Control** lab on PortSwigger Web Security Academy.
 
-The lab demonstrated how relying solely on the HTTP **Referer** header for authorization is insecure, as request headers can be modified by an attacker. Using **Burp Suite**, I analyzed and modified HTTP requests to observe how improper server-side authorization checks can lead to unauthorized access.
+The lab demonstrated how relying solely on the HTTP **Referer** header for authorization is insecure. Using **Burp Suite**, I analyzed and modified HTTP requests to understand how improper server-side authorization checks can result in unauthorized access.
 
-**Key Concepts Learned**
+### Key Concepts Learned
 
-- Access Control Validation
+- Authorization Validation
 - Referer Header Manipulation
 - Broken Access Control
-- Authorization Bypass
-- HTTP Request Analysis using Burp Suite
+- HTTP Request Analysis
+- Burp Suite Interception
+
+---
+
+# Key Learnings
+
+- Understood the IAAA security model.
+- Explored common access control vulnerabilities.
+- Learned Linux privilege escalation fundamentals.
+- Understood the risks of Broken Access Control.
+- Learned why Referer headers should never be trusted for authorization.
+- Explored GTFOBins as a Linux privilege escalation reference.
+- Learned how the Wayback Machine supports OSINT and reconnaissance.
+- Gained hands-on experience through TryHackMe and PortSwigger labs.
+
 ---
 
 # Reflection
 
-Today's session emphasized the importance of implementing proper authorization and secure privilege management. The hands-on labs demonstrated how seemingly small security misconfigurations can lead to privilege escalation or unauthorized access. Learning about GTFOBins also highlighted the importance of understanding native Linux utilities during security assessments.
+Today's session provided a deeper understanding of access control and privilege management in both Linux systems and web applications. The practical labs demonstrated how seemingly small security misconfigurations can lead to unauthorized access or privilege escalation. Learning resources such as GTFOBins and the Wayback Machine also highlighted the importance of reconnaissance and secure system configuration during penetration testing.
 
 ---
 
 # Assignment
 
 - Complete additional Linux Privilege Escalation rooms on TryHackMe.
-- Explore more GTFOBins examples.
-- Practice PortSwigger access control labs.
-- Revise the IAAA security model and authorization concepts.
+- Explore more GTFOBins techniques.
+- Practice additional PortSwigger Access Control labs.
+- Revise the IAAA Security Model and Access Control concepts.
 
 ---
 
 # Screenshots
 
-Screenshots from today's labs are available in the `screenshots/` directory.
+Screenshots from today's theory session and practical labs are available in the **`screenshots/`** directory.
